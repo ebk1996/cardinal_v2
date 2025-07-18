@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Temporary permissive rules for testing
+    match /bookmarks/{bookmarkId} {
+      allow read, write, create, delete: if request.auth != null;
+    }
+    
+    // Allow read access to tweets for all authenticated users
+    match /tweets/{tweetId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Allow read access to comments for all authenticated users
+    match /comments/{commentId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Default rule: deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
